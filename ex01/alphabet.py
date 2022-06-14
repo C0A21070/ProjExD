@@ -1,5 +1,5 @@
 import datetime
-from random import randint, random
+from random import random
 words=10
 dwords=2
 count=5
