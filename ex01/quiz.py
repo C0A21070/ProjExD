@@ -1,6 +1,6 @@
 from random import randint, random
 def main():
-    a=(shutudai())
+    a=shutudai()
     kaito(a)
 def shutudai():
     r=random.randint(0,2)
