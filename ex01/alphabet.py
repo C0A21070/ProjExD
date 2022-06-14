@@ -30,7 +30,7 @@ def shutudai():
     print(o_al)
 
 def kaitou(a):
-    num=int(input)("欠損文字はいくつあるでしょうか？")
+    num=int(input("欠損文字はいくつあるでしょうか？"))
     if num!=dwords:
         print("不正解です。またチャレンジしてください")
         return 0
