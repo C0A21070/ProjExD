@@ -12,11 +12,12 @@ def key_up(event):
 def main_proc():
     global cx,cy,mx,my
     
-    if key=="r":
-        maze_mk=mm.make_maze(15,9)
-        mm.show_maze(canvas,maze_mk)
-        canvas.create_rectangle(100,100,200,200,fill="red")
-        #canvas.coords("tori",cx,cy)
+    #if key=="r":
+    #    maze_mk=mm.make_maze(15,9)
+    #    mm.show_maze(canvas,maze_mk)
+    #    canvas.create_rectangle(100,100,200,200,fill="red")
+    #    canvas.coords("tori",cx,cy)
+    
     if key=="Up" and maze_mk[my-1][mx]==0:my-=1    
     if key=="Down"and maze_mk[my+1][mx]==0:my+=1    
     if key=="Left"and maze_mk[my][mx-1]==0:mx-=1
