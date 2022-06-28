@@ -11,14 +11,20 @@ def key_up(event):
 
 def main_proc():
     global cx,cy,mx,my
+    
+    if key=="r":
+        maze_mk=mm.make_maze(15,9)
+        mm.show_maze(canvas,maze_mk)
+        canvas.create_rectangle(100,100,200,200,fill="red")
+        #canvas.coords("tori",cx,cy)
     if key=="Up" and maze_mk[my-1][mx]==0:my-=1    
     if key=="Down"and maze_mk[my+1][mx]==0:my+=1    
     if key=="Left"and maze_mk[my][mx-1]==0:mx-=1
     if key=="Right"and maze_mk[my][mx+1]==0:mx+=1
-    cx,cy=mx*100+50,my*100+50    
+    cx,cy=mx*100+50,my*100+50   
     canvas.coords("tori",cx,cy)
     root.after(100,main_proc)
-
+    
 if __name__=="__main__":
     #タイトル
     root=tk.Tk()
@@ -31,9 +37,10 @@ if __name__=="__main__":
     #迷路の生成
     maze_mk=mm.make_maze(15,9)
     mm.show_maze(canvas,maze_mk)
+    canvas.create_rectangle(100,100,200,200,fill="red")
     
     #こうかとんの描写
-    tori=tk.PhotoImage(file="fig/5.png")
+    tori=tk.PhotoImage(file="fig/3.png")
     mx,my=1,1
     canvas.create_image(mx,my,image=tori,tag="tori")
     
