@@ -10,13 +10,14 @@ def key_up(event):
     key=""
 
 def main_proc():
-    global cx,cy
-    if key=="Up":cy-=20    
-    elif key=="Down":cy+=20    
-    elif key=="Left":cx-=20
-    elif key=="Right":cx+=20    
+    global cx,cy,mx,my
+    if key=="Up":my-=1    
+    elif key=="Down":my+=1    
+    elif key=="Left":mx-=1
+    elif key=="Right":mx+=1
+    cx,cy=mx*100+50,my*100+50    
     canvas.coords("tori",cx,cy)
-    root.after(5,main_proc)
+    root.after(100,main_proc)
 
 if __name__=="__main__":
     #タイトル
@@ -33,13 +34,13 @@ if __name__=="__main__":
     
     #こうかとんの描写
     tori=tk.PhotoImage(file="fig/5.png")
-    cx,cy=300,400
-    canvas.create_image(cx,cy,image=tori,tag="tori")
+    mx,my=1,1
+    canvas.create_image(mx,my,image=tori,tag="tori")
     
     #キー入力
     key=""
     root.bind("<KeyPress>",key_down)
     root.bind("<KeyRelease>",key_up)
-    root.after(5,main_proc)
+    root.after(100,main_proc)
 
     root.mainloop()
