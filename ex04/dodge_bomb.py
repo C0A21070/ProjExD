@@ -23,6 +23,7 @@ def main():
     bmimg_rct= bmimg_sfc.get_rect()         #Rect
     bmimg_rct.centerx = randint(0,screen_rct.width)
     bmimg_rct.centery = randint(0,screen_rct.height)
+    vx,vy= +1,+1
 
     while True:
         screen_sfc.blit(bg_img,bg_rect)         #背景の表示
@@ -37,6 +38,7 @@ def main():
         if key_states[pg.K_RIGHT] == True : kk_rct.centerx +=1    #X座標を+1
         screen_sfc.blit(kk_img,kk_rct)     #画像の表示
 
+        bmimg_rct.move_ip(vx,vy)
         screen_sfc.blit(bmimg_sfc,bmimg_rct)        #爆弾の表示
 
         pg.display.update()
