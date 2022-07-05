@@ -6,7 +6,7 @@ def main():
     clock=pg.time.Clock()                       #時間計測用のオブジェクト
     #画面
     pg.display.set_caption("逃げろ！こうかとん") #タイトルバー    
-    screen_sfc=pg.display.set_mode((1600,900))      #1400*800の画面Surfaceを生成
+    screen_sfc=pg.display.set_mode((1600,900))      #1600*900の画面Surfaceを生成
     screen_rct=screen_sfc.get_rect()
     #背景
     bg_img=pg.image.load("pg_bg.jpg")           #Surface
@@ -17,14 +17,22 @@ def main():
     kk_img=pg.transform.rotozoom(kk_img, 0, 2.0) #Surface
     kk_rct=kk_img.get_rect()               #Rect
     kk_rct.center = 900, 400
-    #爆弾
-    bmimg_sfc=pg.Surface((20,100))          #Surface
-    bmimg_sfc.set_colorkey((0,0,0))
-    pg.draw.circle(bmimg_sfc,(255, 0, 0), (10,10), 10)
-    bmimg_rct=bmimg_sfc.get_rect()         #Rect
-    bmimg_rct.centerx = randint(0,screen_rct.width)
-    bmimg_rct.centery = randint(0,screen_rct.height)
-    vx,vy= +1,+1
+    #爆弾1
+    bmimg_sfc1=pg.Surface((20,20))          #Surface
+    bmimg_sfc1.set_colorkey((0,0,0))
+    pg.draw.circle(bmimg_sfc1,(255, 0, 0), (10,10), 10)     
+    bmimg_rct1=bmimg_sfc1.get_rect()         #Rect
+    bmimg_rct1.centerx = randint(0,screen_rct.width)
+    bmimg_rct1.centery = randint(0,screen_rct.height)
+    vx1,vy1= +1,+1
+    #爆弾2
+    bmimg_sfc2=pg.Surface((20,20))          #Surface
+    bmimg_sfc2.set_colorkey((0,0,0))
+    pg.draw.circle(bmimg_sfc2,(0, 0, 255), (10,10), 10)
+    bmimg_rct2=bmimg_sfc2.get_rect()         #Rect
+    bmimg_rct2.centerx = randint(0,screen_rct.width)
+    bmimg_rct2.centery = randint(0,screen_rct.height)
+    vx2,vy2= +1,+1
 
     while True:
         screen_sfc.blit(bg_img,bg_rect)         #背景の表示
@@ -38,19 +46,25 @@ def main():
         if key_states[pg.K_LEFT] == True : kk_rct.centerx -=1     #X座標を-1
         if key_states[pg.K_RIGHT] == True : kk_rct.centerx +=1    #X座標を+1
         if check_bound(kk_rct,screen_rct) != (1,1):               #領域外だったら
-            if key_states[pg.K_UP] == True : kk_rct.centery -=1       #Y座標を-1
-            if key_states[pg.K_DOWN] == True : kk_rct.centery +=1     #Y座標を+1
-            if key_states[pg.K_LEFT] == True : kk_rct.centerx -=1     #X座標を-1
-            if key_states[pg.K_RIGHT] == True : kk_rct.centerx +=1    #X座標を+1
+            if key_states[pg.K_UP] == True : kk_rct.centery +=1       #Y座標を+1
+            if key_states[pg.K_DOWN] == True : kk_rct.centery -=1     #Y座標を-1
+            if key_states[pg.K_LEFT] == True : kk_rct.centerx +=1     #X座標を+1
+            if key_states[pg.K_RIGHT] == True : kk_rct.centerx -=1    #X座標を-1
         screen_sfc.blit(kk_img,kk_rct)     #画像の表示
 
-        bmimg_rct.move_ip(vx,vy)
-        screen_sfc.blit(bmimg_sfc,bmimg_rct)        #爆弾の表示
-        yk,tt = check_bound(bmimg_rct,screen_rct)
-        vx *=yk
-        vy *=tt
+        bmimg_rct1.move_ip(vx1,vy1)
+        screen_sfc.blit(bmimg_sfc1,bmimg_rct1)        #爆弾1の表示
+        yk1,tt1 = check_bound(bmimg_rct1,screen_rct)
+        vx1 *=yk1
+        vy1 *=tt1
+        if kk_rct.colliderect(bmimg_rct1) : return    #爆弾１の当たり判定
 
-        if kk_rct.colliderect(bmimg_rct) : return
+        bmimg_rct2.move_ip(vx2,vy2)
+        screen_sfc.blit(bmimg_sfc2,bmimg_rct2)
+        yk2,tt2 = check_bound(bmimg_rct2,screen_rct)  
+        vx2 *=yk2
+        vy2 *=tt2
+        if kk_rct.colliderect(bmimg_rct2) : return     #爆弾２の当たり判定
 
         pg.display.update()
         clock.tick(1000)        #1000fpsの時を刻む
