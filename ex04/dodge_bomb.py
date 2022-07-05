@@ -41,15 +41,15 @@ def main():
             if event.type == pg.QUIT: return    #ウィンドウのXボタンをクリックしたら
         #
         key_states=pg.key.get_pressed() #辞書
-        if key_states[pg.K_UP] == True : kk_rct.centery -=1       #Y座標を-1
-        if key_states[pg.K_DOWN] == True : kk_rct.centery +=1     #Y座標を+1
-        if key_states[pg.K_LEFT] == True : kk_rct.centerx -=1     #X座標を-1
-        if key_states[pg.K_RIGHT] == True : kk_rct.centerx +=1    #X座標を+1
+        if key_states[pg.K_UP]  : kk_rct.centery -=1       #Y座標を-1
+        if key_states[pg.K_DOWN]  : kk_rct.centery +=1     #Y座標を+1
+        if key_states[pg.K_LEFT]  : kk_rct.centerx -=1     #X座標を-1
+        if key_states[pg.K_RIGHT]  : kk_rct.centerx +=1    #X座標を+1
         if check_bound(kk_rct,screen_rct) != (1,1):               #領域外だったら
-            if key_states[pg.K_UP] == True : kk_rct.centery +=1       #Y座標を+1
-            if key_states[pg.K_DOWN] == True : kk_rct.centery -=1     #Y座標を-1
-            if key_states[pg.K_LEFT] == True : kk_rct.centerx +=1     #X座標を+1
-            if key_states[pg.K_RIGHT] == True : kk_rct.centerx -=1    #X座標を-1
+            if key_states[pg.K_UP] : kk_rct.centery +=1       #Y座標を+1
+            if key_states[pg.K_DOWN] : kk_rct.centery -=1     #Y座標を-1
+            if key_states[pg.K_LEFT] : kk_rct.centerx +=1     #X座標を+1
+            if key_states[pg.K_RIGHT] : kk_rct.centerx -=1    #X座標を-1
         screen_sfc.blit(kk_img,kk_rct)     #画像の表示
 
         bmimg_rct1.move_ip(vx1,vy1)
