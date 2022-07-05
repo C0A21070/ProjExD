@@ -9,7 +9,7 @@ def main():
     screen_sfc=pg.display.set_mode((1600,900))      #1600*900の画面Surfaceを生成
     screen_rct=screen_sfc.get_rect()
     #背景
-    bg_img=pg.image.load("pg_bg.jpg")           #Surface
+    bg_img=pg.image.load("fig/pg_bg.jpg")           #Surface
     bg_rect=bg_img.get_rect()                   #Rect
     screen_sfc.blit(bg_img,bg_rect) 
     #画像
@@ -76,8 +76,8 @@ def check_bound(rct,scr_rct):
 
 def check_bound_bomb(rct,scr_rct):
     yoko,tate = +1 , +1
-    if rct.left < scr_rct.left or scr_rct.right  < rct.right : yoko = -1*1.1
-    if rct.top < scr_rct.top or scr_rct.bottom  < rct.bottom : tate = -1*1.1
+    if rct.left < scr_rct.left or scr_rct.right  < rct.right : yoko = -1*1.2
+    if rct.top < scr_rct.top or scr_rct.bottom  < rct.bottom : tate = -1*1.2
     return (yoko,tate)
 
 if __name__=="__main__":
