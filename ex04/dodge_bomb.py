@@ -54,14 +54,14 @@ def main():
 
         bmimg_rct1.move_ip(vx1,vy1)
         screen_sfc.blit(bmimg_sfc1,bmimg_rct1)        #爆弾1の表示
-        yk1,tt1 = check_bound(bmimg_rct1,screen_rct)
+        yk1,tt1 = check_bound_bomb(bmimg_rct1,screen_rct)
         vx1 *=yk1
         vy1 *=tt1
         if kk_rct.colliderect(bmimg_rct1) : return    #爆弾１の当たり判定
 
         bmimg_rct2.move_ip(vx2,vy2)
         screen_sfc.blit(bmimg_sfc2,bmimg_rct2)
-        yk2,tt2 = check_bound(bmimg_rct2,screen_rct)  
+        yk2,tt2 = check_bound_bomb(bmimg_rct2,screen_rct)  
         vx2 *=yk2
         vy2 *=tt2
         if kk_rct.colliderect(bmimg_rct2) : return     #爆弾２の当たり判定
@@ -73,6 +73,13 @@ def check_bound(rct,scr_rct):
     if rct.left < scr_rct.left or scr_rct.right  < rct.right : yoko = -1
     if rct.top < scr_rct.top or scr_rct.bottom  < rct.bottom : tate = -1
     return (yoko,tate)
+
+def check_bound_bomb(rct,scr_rct):
+    yoko,tate = +1 , +1
+    if rct.left < scr_rct.left or scr_rct.right  < rct.right : yoko = -1*1.1
+    if rct.top < scr_rct.top or scr_rct.bottom  < rct.bottom : tate = -1*1.1
+    return (yoko,tate)
+
 if __name__=="__main__":
     pg.init()       #モジュールを初期化
     main()          #ゲームのメイン関数
