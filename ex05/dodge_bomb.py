@@ -38,7 +38,8 @@ class Bird:
             if key_states[pg.K_LEFT] : self.kk_rct.centerx +=1     #X座標を+1
             if key_states[pg.K_RIGHT] : self.kk_rct.centerx -=1    #X座標を-1
         self.blit(scr)
-class Bomb:
+
+class Bomb1:
     
     def __init__(self,color,size,vxy,scr:Screen):
         self.bmimg_sfc1=pg.Surface((2*size,2*size))          #Surface
@@ -57,7 +58,42 @@ class Bomb:
         self.vx1 *=yk1
         self.vy1 *=tt1
         self.bilt(scr)
+class Bomb2:
+    
+    def __init__(self,color,size,vxy,scr:Screen):
+        self.bmimg_sfc2=pg.Surface((2*size,2*size))          #Surface
+        self.bmimg_sfc2.set_colorkey((0,0,0))
+        pg.draw.circle(self.bmimg_sfc2,color,(size,size),size)     
+        self.bmimg_rct2=self.bmimg_sfc2.get_rect()         #Rect
+        self.bmimg_rct2.centerx = randint(0,scr.sc_rct.width)
+        self.bmimg_rct2.centery = randint(0,scr.sc_rct.height)
+        self.vx2,self.vy2= vxy
+    def bilt(self,scr):
+        scr.sc_sfc.blit(self.bmimg_sfc2,self.bmimg_rct2)   #爆弾2の表示 
 
+    def update(self,scr):
+        self.bmimg_rct2.move_ip(self.vx2,self.vy2)
+        yk2,tt2 = check_bound(self.bmimg_rct2,scr.sc_rct)
+        self.vx2 *=yk2
+        self.vy2 *=tt2
+        self.bilt(scr)
+"""
+class Shot:
+    def __init__(self,chr:Bird):
+        self.sfc=pg.image.load("")                         #Surface
+        self.sfc=pg.transform.rotozoom(self.sfc, 0, 0.1) #Surface
+        self.rct=self.kk_sfc.get_rect()                      #Rect
+        self.rct.midleft = chr.rct.center
+    
+    def bilt(self,scr:Screen):
+        scr.sc_sfc.blit(self.sfc,self.rct)
+    
+    def updata(self,scr:Screen):
+        self.rct.move_ip(+1,0)
+        if check_bound(self.rct,scr.bg_rct) != (1,1):
+            del self
+        self.bilt(scr)
+"""
 def main():
     clock=pg.time.Clock()                       #時間計測用のオブジェクト
 
@@ -65,7 +101,10 @@ def main():
 
     kkt=Bird("fig/6.png",2.0,(900, 400))
     
-    bkd=Bomb((255, 0, 0),10,(+1,+1),scr)
+    bkd1=Bomb1((255, 0, 0),10,(+1,+1),scr)
+    bkd2=Bomb2((0, 0, 255),10,(+1,+1),scr)
+
+    beam = None
 
     while True:
         scr.blit()
@@ -73,11 +112,17 @@ def main():
         #イベント
         for event in pg.event.get():        #イベントを繰り返して処理
             if event.type == pg.QUIT: return    #ウィンドウのXボタンをクリックしたら
-
+            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                beam = kkt.attack()
         kkt.update(scr)
-        bkd.update(scr)
+        bkd1.update(scr)
+        bkd2.update(scr)
         
-        if kkt.kk_rct.colliderect(bkd.bmimg_rct1) : return    #爆弾１の当たり判定
+        if beam:
+            beam.updata(scr)
+        
+        if kkt.kk_rct.colliderect(bkd1.bmimg_rct1) : return    #爆弾１の当たり判定
+        if kkt.kk_rct.colliderect(bkd2.bmimg_rct2) : return    #爆弾2の当たり判定
         
         pg.display.update()
         clock.tick(1000)        #1000fpsの時を刻む
