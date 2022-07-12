@@ -28,15 +28,15 @@ class Bird:
     
     def update(self,scr):
         key_states=pg.key.get_pressed() #辞書
-        if key_states[pg.K_UP]  : self.kk_rct.centery -=2       #Y座標を-1
-        if key_states[pg.K_DOWN]  : self.kk_rct.centery +=2     #Y座標を+1
-        if key_states[pg.K_LEFT]  : self.kk_rct.centerx -=2     #X座標を-1
-        if key_states[pg.K_RIGHT]  : self.kk_rct.centerx +=2    #X座標を+1
+        if key_states[pg.K_UP]  : self.kk_rct.centery -=2       #Y座標を-2
+        if key_states[pg.K_DOWN]  : self.kk_rct.centery +=2     #Y座標を+2
+        if key_states[pg.K_LEFT]  : self.kk_rct.centerx -=2     #X座標を-2
+        if key_states[pg.K_RIGHT]  : self.kk_rct.centerx +=2    #X座標を+2
         if check_bound(self.kk_rct,scr.sc_rct) != (1,1):               #領域外だったら
-            if key_states[pg.K_UP] : self.kk_rct.centery +=2       #Y座標を+1
-            if key_states[pg.K_DOWN] : self.kk_rct.centery -=2     #Y座標を-1
-            if key_states[pg.K_LEFT] : self.kk_rct.centerx +=2     #X座標を+1
-            if key_states[pg.K_RIGHT] : self.kk_rct.centerx -=2    #X座標を-1
+            if key_states[pg.K_UP] : self.kk_rct.centery +=2       #Y座標を+2
+            if key_states[pg.K_DOWN] : self.kk_rct.centery -=2     #Y座標を-2
+            if key_states[pg.K_LEFT] : self.kk_rct.centerx +=2     #X座標を+2
+            if key_states[pg.K_RIGHT] : self.kk_rct.centerx -=2    #X座標を-2
         self.blit(scr)
 
 class Bomb1:
@@ -80,6 +80,26 @@ class Bomb2:
         self.vy2 *=tt2
         self.bilt(scr)
 
+class Bomb3:
+    
+    def __init__(self,color,size,vxy,scr:Screen):
+        self.bmimg_sfc3=pg.Surface((2*size,2*size))          #Surface
+        self.bmimg_sfc3.set_colorkey((0,0,0))
+        pg.draw.circle(self.bmimg_sfc3,color,(size,size),size)     
+        self.bmimg_rct3=self.bmimg_sfc3.get_rect()         #Rect
+        self.bmimg_rct3.centerx = randint(0,scr.sc_rct.width)
+        self.bmimg_rct3.centery = randint(0,scr.sc_rct.height)
+        self.vx3,self.vy3= vxy
+    
+    def bilt(self,scr):
+        scr.sc_sfc.blit(self.bmimg_sfc3,self.bmimg_rct3)   #爆弾3の表示 
+
+    def update(self,scr):
+        self.bmimg_rct3.move_ip(self.vx3,self.vy3)
+        yk3,tt3 = check_bound_bomb(self.bmimg_rct3,scr.sc_rct)
+        self.vx3 *=yk3
+        self.vy3 *=tt3
+        self.bilt(scr)
 """
 class Shot:
     def __init__(self,chr:Bird):
@@ -103,10 +123,11 @@ def main():
     
     scr=Screen("逃げろ！こうかとん",(1600,900),"fig/pg_bg.jpg")     #画面
 
-    kkt=Bird("fig/6.png",2.0,(900, 400))            #こうかとん
+    kkt=Bird("fig/6.png",2.0,(900, 400))   #こうかとん
 
-    bkd1=Bomb1((255, 0, 0),10,(+1,+1),scr)
-    bkd2=Bomb2((0, 0, 255),10,(+1,+1),scr) 
+    bkd1=Bomb1((255, 0, 0),10,(+1,+1),scr)   #爆弾  
+    bkd2=Bomb2((0, 0, 255),10,(+1,+1),scr)
+    bkd3=Bomb3((0, 255, 255),10,(+1,+1),scr) 
 
     #beam = None
 
@@ -116,22 +137,25 @@ def main():
         #イベント
         for event in pg.event.get():        #イベントを繰り返して処理
             if event.type == pg.QUIT: return    #ウィンドウのXボタンをクリックしたら
-            #if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-            #    beam = kkt.attack()
-            if event.type == pg.KEYDOWN and event.key == pg.K_r:
-                kkt=Bird("fig/6.png",2.0,(900, 400))            #こうかとん
+            if event.type == pg.KEYDOWN and event.key == pg.K_r:    #Rを押すと再描画がされる
+                kkt=Bird("fig/6.png",2.0,(900, 400))            
                 bkd1=Bomb1((255, 0, 0),10,(+1,+1),scr)
                 bkd2=Bomb2((0, 0, 255),10,(+1,+1),scr)
+                bkd3=Bomb3((0, 255, 255),10,(+1,+1),scr)
+            #if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+            #    beam = kkt.attack()
+        
         kkt.update(scr)
         bkd1.update(scr)
         bkd2.update(scr)
-        
+        bkd3.update(scr)
         #if beam:
         #    beam.updata(scr)
         
-        if kkt.kk_rct.colliderect(bkd1.bmimg_rct1) : return    #爆弾１の当たり判定
+        if kkt.kk_rct.colliderect(bkd1.bmimg_rct1) : return    #爆弾1の当たり判定
         if kkt.kk_rct.colliderect(bkd2.bmimg_rct2) : return    #爆弾2の当たり判定
-        
+        if kkt.kk_rct.colliderect(bkd2.bmimg_rct2) : return    #爆弾3の当たり判定
+
         pg.display.update()
         clock.tick(1000)        #1000fpsの時を刻む
 
